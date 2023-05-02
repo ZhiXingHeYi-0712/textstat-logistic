@@ -1196,8 +1196,6 @@ class textstatistics:
 
         score = vocabulary_score + sentence_score
 
-        print(per_difficult_words)
-
         if per_difficult_words > 5:
             score += 3.6365
         return (self._legacy_round(score, 2), vocabulary_score, sentence_score)
