@@ -4,7 +4,7 @@
 """Test suite for textstat
 """
 
-import textstat
+import textstat_logistic
 
 short_test = "Cool dogs wear da sunglasses."
 
@@ -201,9 +201,9 @@ hard_arabic_text = (
 
 
 def test_char_count():
-    textstat.set_lang("en_US")
-    count = textstat.char_count(long_test)
-    count_spaces = textstat.char_count(
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.char_count(long_test)
+    count_spaces = textstat_logistic.char_count(
         long_test, ignore_spaces=False
     )
 
@@ -212,9 +212,9 @@ def test_char_count():
 
 
 def test_letter_count():
-    textstat.set_lang("en_US")
-    count = textstat.letter_count(long_test)
-    count_spaces = textstat.letter_count(
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.letter_count(long_test)
+    count_spaces = textstat_logistic.letter_count(
         long_test, ignore_spaces=False
     )
 
@@ -223,426 +223,426 @@ def test_letter_count():
 
 
 def test_remove_punctuation_incl_apostrophe():
-    textstat.set_lang('en_US')
-    textstat.set_rm_apostrophe(True)
-    text = textstat.remove_punctuation(punct_text)
+    textstat_logistic.set_lang('en_US')
+    textstat_logistic.set_rm_apostrophe(True)
+    text = textstat_logistic.remove_punctuation(punct_text)
 
     # set the __rm_apostrophe attribute back to the default
-    textstat.set_rm_apostrophe(False)
+    textstat_logistic.set_rm_apostrophe(False)
 
     assert text == punct_text_result_wo_apostr
 
 
 def test_remove_punctuation_excl_apostrophe():
-    textstat.set_lang('en_US')
-    textstat.set_rm_apostrophe(False)
-    text = textstat.remove_punctuation(punct_text)
+    textstat_logistic.set_lang('en_US')
+    textstat_logistic.set_rm_apostrophe(False)
+    text = textstat_logistic.remove_punctuation(punct_text)
 
     assert text == punct_text_result_w_apostr
 
 
 def test_lexicon_count():
-    textstat.set_lang("en_US")
-    count = textstat.lexicon_count(long_test)
-    count_punc = textstat.lexicon_count(long_test, removepunct=False)
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.lexicon_count(long_test)
+    count_punc = textstat_logistic.lexicon_count(long_test, removepunct=False)
 
     assert count == 372
     assert count_punc == 376
 
 
 def test_syllable_count():
-    textstat.set_lang("en_US")
-    count = textstat.syllable_count(long_test)
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.syllable_count(long_test)
 
     assert count == 519
 
 
 def test_sentence_count():
-    textstat.set_lang("en_US")
-    count = textstat.sentence_count(long_test)
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.sentence_count(long_test)
 
     assert count == 17
 
 
 def test_sentence_count_russian():
-    textstat.set_lang('ru_RU')
-    count = textstat.sentence_count(long_russian_text_guillemets)
+    textstat_logistic.set_lang('ru_RU')
+    count = textstat_logistic.sentence_count(long_russian_text_guillemets)
 
     assert count == 16
 
 
 def test_avg_sentence_length():
-    textstat.set_lang("en_US")
-    avg = textstat.avg_sentence_length(long_test)
+    textstat_logistic.set_lang("en_US")
+    avg = textstat_logistic.avg_sentence_length(long_test)
 
     assert avg == 21.9
 
 
 def test_avg_syllables_per_word():
-    textstat.set_lang("en_US")
-    avg = textstat.avg_syllables_per_word(long_test)
+    textstat_logistic.set_lang("en_US")
+    avg = textstat_logistic.avg_syllables_per_word(long_test)
 
     assert avg == 1.4
 
 
 def test_avg_letter_per_word():
-    textstat.set_lang("en_US")
-    avg = textstat.avg_letter_per_word(long_test)
+    textstat_logistic.set_lang("en_US")
+    avg = textstat_logistic.avg_letter_per_word(long_test)
 
     assert avg == 4.53
 
 
 def test_avg_sentence_per_word():
-    textstat.set_lang("en_US")
-    avg = textstat.avg_sentence_per_word(long_test)
+    textstat_logistic.set_lang("en_US")
+    avg = textstat_logistic.avg_sentence_per_word(long_test)
 
     assert avg == 0.05
 
 
 def test_flesch_reading_ease():
-    textstat.set_lang("en_US")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 66.17
 
-    textstat.set_lang("de_DE")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("de_DE")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 64.5
 
-    textstat.set_lang("es_ES")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("es_ES")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 86.76
 
-    textstat.set_lang("fr_FR")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("fr_FR")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 81.73
 
-    textstat.set_lang("it_IT")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("it_IT")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 91.57
 
-    textstat.set_lang("nl_NL")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("nl_NL")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 63.27
 
-    textstat.set_lang("ru_RU")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("ru_RU")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 118.27
 
 
 def test_flesch_kincaid_grade():
-    textstat.set_lang("en_US")
-    score = textstat.flesch_kincaid_grade(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.flesch_kincaid_grade(long_test)
 
     assert score == 9.5
 
 
 def test_polysyllabcount():
-    textstat.set_lang("en_US")
-    count = textstat.polysyllabcount(long_test)
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.polysyllabcount(long_test)
 
     assert count == 32
 
 
 def test_smog_index():
-    textstat.set_lang("en_US")
-    index = textstat.smog_index(long_test)
+    textstat_logistic.set_lang("en_US")
+    index = textstat_logistic.smog_index(long_test)
 
     assert index == 11.0
 
 
 def test_coleman_liau_index():
-    textstat.set_lang("en_US")
-    index = textstat.coleman_liau_index(long_test)
+    textstat_logistic.set_lang("en_US")
+    index = textstat_logistic.coleman_liau_index(long_test)
 
     assert index == 8.99
 
 
 def test_automated_readability_index():
-    textstat.set_lang("en_US")
-    index = textstat.automated_readability_index(long_test)
+    textstat_logistic.set_lang("en_US")
+    index = textstat_logistic.automated_readability_index(long_test)
 
     assert index == 11.6
 
 
 def test_linsear_write_formula():
-    textstat.set_lang("en_US")
-    result = textstat.linsear_write_formula(long_test)
+    textstat_logistic.set_lang("en_US")
+    result = textstat_logistic.linsear_write_formula(long_test)
 
     assert result == 14.5
 
-    result = textstat.linsear_write_formula(empty_str)
+    result = textstat_logistic.linsear_write_formula(empty_str)
 
     assert result == -1.0
 
 
 def test_difficult_words():
-    textstat.set_lang("en_US")
-    result = textstat.difficult_words(long_test)
+    textstat_logistic.set_lang("en_US")
+    result = textstat_logistic.difficult_words(long_test)
 
     assert result == 49
 
 
 def test_difficult_words_list():
-    textstat.set_lang("en_US")
-    result = textstat.difficult_words_list(short_test)
+    textstat_logistic.set_lang("en_US")
+    result = textstat_logistic.difficult_words_list(short_test)
 
     assert result == ["sunglasses"]
 
 
 def test_is_difficult_word():
-    textstat.set_lang("en_US")
-    result = textstat.is_difficult_word(difficult_word)
+    textstat_logistic.set_lang("en_US")
+    result = textstat_logistic.is_difficult_word(difficult_word)
 
     assert result is True
 
 
 def test_is_easy_word():
-    textstat.set_lang("en_US")
-    result = textstat.is_easy_word(easy_word)
+    textstat_logistic.set_lang("en_US")
+    result = textstat_logistic.is_easy_word(easy_word)
 
     assert result is True
 
 
 def test_dale_chall_readability_score():
-    textstat.set_lang("en_US")
-    score = textstat.dale_chall_readability_score(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.dale_chall_readability_score(long_test)
 
     assert score == 7.78
 
-    score = textstat.dale_chall_readability_score(empty_str)
+    score = textstat_logistic.dale_chall_readability_score(empty_str)
 
     assert score == 0.0
 
 
 def test_gunning_fog():
-    textstat.set_lang("en_US")
-    score = textstat.gunning_fog(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.gunning_fog(long_test)
 
     assert score == 10.7
 
     # FOG-PL
-    textstat.set_lang("pl_PL")
-    score_pl = textstat.gunning_fog(long_test)
+    textstat_logistic.set_lang("pl_PL")
+    score_pl = textstat_logistic.gunning_fog(long_test)
 
     assert score_pl == 9.84
 
 
 def test_lix():
-    textstat.set_lang("en_US")
-    score = textstat.lix(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.lix(long_test)
 
     assert score == 43.71
 
-    result = textstat.lix(empty_str)
+    result = textstat_logistic.lix(empty_str)
 
     assert result == 0.0
 
 
 def test_rix():
-    textstat.set_lang("en_US")
-    score = textstat.rix(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.rix(long_test)
 
     assert score == 4.59
 
 
 def test_text_standard():
-    textstat.set_lang("en_US")
-    standard = textstat.text_standard(long_test)
+    textstat_logistic.set_lang("en_US")
+    standard = textstat_logistic.text_standard(long_test)
 
     assert standard == "10th and 11th grade"
 
-    standard = textstat.text_standard(short_test)
+    standard = textstat_logistic.text_standard(short_test)
 
     assert standard == "2nd and 3rd grade"
 
 
 def test_reading_time():
-    textstat.set_lang("en_US")
-    score = textstat.reading_time(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.reading_time(long_test)
 
     assert score == 25.68
 
 
 def test_lru_caching():
-    textstat.set_lang("en_US")
+    textstat_logistic.set_lang("en_US")
     # Clear any cache
-    textstat.sentence_count.cache_clear()
-    textstat.avg_sentence_length.cache_clear()
+    textstat_logistic.sentence_count.cache_clear()
+    textstat_logistic.avg_sentence_length.cache_clear()
 
     # Make a call that uses `sentence_count`
-    textstat.avg_sentence_length(long_test)
+    textstat_logistic.avg_sentence_length(long_test)
 
     # Test that `sentence_count` was called
-    assert textstat.sentence_count.cache_info().misses == 1
+    assert textstat_logistic.sentence_count.cache_info().misses == 1
 
     # Call `avg_sentence_length` again, but clear it's cache first
-    textstat.avg_sentence_length.cache_clear()
-    textstat.avg_sentence_length(long_test)
+    textstat_logistic.avg_sentence_length.cache_clear()
+    textstat_logistic.avg_sentence_length(long_test)
 
     # Test that `sentence_count` wasn't called again
-    assert textstat.sentence_count.cache_info().hits == 1
+    assert textstat_logistic.sentence_count.cache_info().hits == 1
 
 
 def test_changing_lang_clears_cache():
-    textstat.set_lang("en_US")
+    textstat_logistic.set_lang("en_US")
 
     # Clear any cache and call reading ease
-    textstat.flesch_reading_ease.cache_clear()
-    textstat.flesch_reading_ease(short_test)
+    textstat_logistic.flesch_reading_ease.cache_clear()
+    textstat_logistic.flesch_reading_ease(short_test)
 
     # Check the cache has only been missed once
-    assert textstat.flesch_reading_ease.cache_info().misses == 1
+    assert textstat_logistic.flesch_reading_ease.cache_info().misses == 1
 
     # Change the language and recall reading ease
-    textstat.set_lang("fr")
-    textstat.flesch_reading_ease(short_test)
+    textstat_logistic.set_lang("fr")
+    textstat_logistic.flesch_reading_ease(short_test)
 
     # Check the cache hasn't been hit again
-    assert textstat.flesch_reading_ease.cache_info().misses == 1
+    assert textstat_logistic.flesch_reading_ease.cache_info().misses == 1
 
 
 def test_unicode_support():
-    textstat.set_lang("en_US")
-    textstat.text_standard(
+    textstat_logistic.set_lang("en_US")
+    textstat_logistic.text_standard(
         "\u3042\u308a\u304c\u3068\u3046\u3054\u3056\u3044\u307e\u3059")
 
-    textstat.text_standard("ありがとうございます")
+    textstat_logistic.text_standard("ありがとうございます")
 
 
 def test_spache_readability():
-    textstat.set_lang("en_US")
-    spache = textstat.spache_readability(easy_text, False)
+    textstat_logistic.set_lang("en_US")
+    spache = textstat_logistic.spache_readability(easy_text, False)
 
     assert spache == 2
 
-    score = textstat.spache_readability(empty_str)
+    score = textstat_logistic.spache_readability(empty_str)
 
     assert score == 0.0
 
 
 def test_dale_chall_readability_score_v2():
-    textstat.set_lang("en_US")
-    score = textstat.dale_chall_readability_score_v2(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.dale_chall_readability_score_v2(long_test)
 
     assert score == 6.8
 
 
 def test_fernandez_huerta():
-    textstat.set_lang("es")
-    score = textstat.fernandez_huerta(long_spanish_text)
+    textstat_logistic.set_lang("es")
+    score = textstat_logistic.fernandez_huerta(long_spanish_text)
 
     assert score == 65.3
 
-    score = textstat.fernandez_huerta(empty_str)
+    score = textstat_logistic.fernandez_huerta(empty_str)
 
     assert score == 206.84
 
 
 def test_szigriszt_pazos():
-    textstat.set_lang("es")
-    score = textstat.szigriszt_pazos(long_spanish_text)
+    textstat_logistic.set_lang("es")
+    score = textstat_logistic.szigriszt_pazos(long_spanish_text)
 
     assert score == 62.16
 
-    score = textstat.szigriszt_pazos(empty_str)
+    score = textstat_logistic.szigriszt_pazos(empty_str)
 
     assert score == 0.0
 
 
 def test_gutierrez_polini():
-    textstat.set_lang("es")
-    score = textstat.gutierrez_polini(easy_spanish_text)
+    textstat_logistic.set_lang("es")
+    score = textstat_logistic.gutierrez_polini(easy_spanish_text)
 
     assert score == 64.35
 
-    score = textstat.gutierrez_polini(empty_str)
+    score = textstat_logistic.gutierrez_polini(empty_str)
 
     assert score == 0.0
 
 
 def test_crawford():
-    textstat.set_lang("es")
-    score = textstat.crawford(long_spanish_text)
+    textstat_logistic.set_lang("es")
+    score = textstat_logistic.crawford(long_spanish_text)
 
     assert score == 5.1
 
-    score = textstat.crawford(empty_str)
+    score = textstat_logistic.crawford(empty_str)
 
     assert score == 0.0
 
 
 def test_wienersachtext_formula():
-    textstat.set_lang("de")
+    textstat_logistic.set_lang("de")
     sample_text = 'Alle meine Entchen schwimmen auf dem See, \
     Köpfchen unters Wasser, Schwänzchen in die Höh.'
-    wstf = textstat.wiener_sachtextformel(sample_text, variant=1)
+    wstf = textstat_logistic.wiener_sachtextformel(sample_text, variant=1)
 
     assert wstf == 3.8
 
     sample_text = 'Alle Parteien widmen dem Thema rein quantitativ \
     betrachtet nennenswerte Aufmerksamkeit, die Grünen wenig überraschend \
     am meisten.'
-    wstf = textstat.wiener_sachtextformel(sample_text, variant=1)
+    wstf = textstat_logistic.wiener_sachtextformel(sample_text, variant=1)
 
     assert wstf == 13.9
 
 
 def test_gulpease_index():
-    textstat.set_lang("it")
-    score = textstat.gulpease_index(italian_text)
+    textstat_logistic.set_lang("it")
+    score = textstat_logistic.gulpease_index(italian_text)
 
     assert score == 40.1
 
 
 def test_default_lang_configs():
     # Config from default en_US should be used
-    textstat.set_lang("en_GB")
-    score = textstat.flesch_reading_ease(long_test)
+    textstat_logistic.set_lang("en_GB")
+    score = textstat_logistic.flesch_reading_ease(long_test)
 
     assert score == 66.17
 
 
 def test_osman():
-    easy_score = textstat.osman(easy_arabic_text)
-    hard_score = textstat.osman(hard_arabic_text)
+    easy_score = textstat_logistic.osman(easy_arabic_text)
+    hard_score = textstat_logistic.osman(hard_arabic_text)
 
     assert easy_score == 102.19
     assert hard_score == 39.29
 
 
 def test_disabling_rounding():
-    textstat.set_lang("en_US")
-    textstat.set_rounding(False)
+    textstat_logistic.set_lang("en_US")
+    textstat_logistic.set_rounding(False)
 
-    index = textstat.spache_readability(long_test)
+    index = textstat_logistic.spache_readability(long_test)
 
-    textstat.set_rounding(True)
+    textstat_logistic.set_rounding(True)
 
     assert index == 5.057207463630613
 
 
 def test_changing_rounding_points():
-    textstat.set_lang("en_US")
-    textstat.set_rounding(True, points=5)
+    textstat_logistic.set_lang("en_US")
+    textstat_logistic.set_rounding(True, points=5)
 
-    index = textstat.spache_readability(long_test)
+    index = textstat_logistic.spache_readability(long_test)
 
-    textstat.set_rounding(True)
+    textstat_logistic.set_rounding(True)
 
     assert index == 5.05721
 
 
 def test_instanced_textstat_rounding():
-    textstat.set_lang("en_US")
+    textstat_logistic.set_lang("en_US")
 
-    from textstat.textstat import textstatistics
+    from textstat_logistic.textstat import textstatistics
 
     my_textstat = textstatistics()
     my_textstat.set_rounding(False)
@@ -651,21 +651,21 @@ def test_instanced_textstat_rounding():
 
     assert my_not_rounded_index == 5.057207463630613
 
-    default_rounded_index = textstat.spache_readability(long_test)
+    default_rounded_index = textstat_logistic.spache_readability(long_test)
 
     assert default_rounded_index == 5.06
 
 
 def test_mcalpine_eflaw():
-    textstat.set_lang("en_US")
-    score = textstat.mcalpine_eflaw(long_test)
+    textstat_logistic.set_lang("en_US")
+    score = textstat_logistic.mcalpine_eflaw(long_test)
 
     assert score == 30.8
 
 
 def test_miniword_count():
-    textstat.set_lang("en_US")
-    count = textstat.miniword_count(long_test)
+    textstat_logistic.set_lang("en_US")
+    count = textstat_logistic.miniword_count(long_test)
 
     assert count == 151
 
@@ -714,13 +714,13 @@ hard_academic_hungarian_text = (
 
 def test_char_count_hungarian():
     # Arrange
-    textstat.set_lang("hu_HU")
+    textstat_logistic.set_lang("hu_HU")
     expected_easy_count = 43
     expected_easy_count_spaces = 54
 
     # Act
-    actual_count = textstat.char_count(easy_hungarian_text)
-    actual_count_spaces = textstat.char_count(
+    actual_count = textstat_logistic.char_count(easy_hungarian_text)
+    actual_count_spaces = textstat_logistic.char_count(
         easy_hungarian_text, ignore_spaces=False
     )
 
@@ -731,12 +731,12 @@ def test_char_count_hungarian():
 
 def test_letter_count_hungarian():
     # Arrange
-    textstat.set_lang("hu_HU")
+    textstat_logistic.set_lang("hu_HU")
     expected_easy_count = 42
     expected_easy_count_spaces = 53
 
-    actual_count = textstat.letter_count(easy_hungarian_text)
-    actual_count_spaces = textstat.letter_count(
+    actual_count = textstat_logistic.letter_count(easy_hungarian_text)
+    actual_count_spaces = textstat_logistic.letter_count(
         easy_hungarian_text, ignore_spaces=False
     )
 
@@ -747,13 +747,13 @@ def test_letter_count_hungarian():
 
 def test_sentence_count_hungarian():
     # Arrange
-    textstat.set_lang('hu_HU')
+    textstat_logistic.set_lang('hu_HU')
     expected_hard = 3
     expected_hard_academic = 6
 
     # Act
-    actual_hard = textstat.sentence_count(hard_hungarian_text)
-    actual_academic = textstat.sentence_count(hard_academic_hungarian_text)
+    actual_hard = textstat_logistic.sentence_count(hard_hungarian_text)
+    actual_academic = textstat_logistic.sentence_count(hard_academic_hungarian_text)
 
     # Assert
     assert actual_hard == expected_hard
@@ -762,15 +762,15 @@ def test_sentence_count_hungarian():
 
 def test_flesch_reading_ease_hungarian():
     # Arrange
-    textstat.set_lang("hu_HU")
+    textstat_logistic.set_lang("hu_HU")
     expected_easy = 89.09
     expected_hard = 53.0
     expected_hard_academic = 22.02
 
     # Act
-    actual_easy = textstat.flesch_reading_ease(easy_hungarian_text2)
-    actual_hard = textstat.flesch_reading_ease(hard_hungarian_text)
-    actual_academic = textstat.flesch_reading_ease(
+    actual_easy = textstat_logistic.flesch_reading_ease(easy_hungarian_text2)
+    actual_hard = textstat_logistic.flesch_reading_ease(hard_hungarian_text)
+    actual_academic = textstat_logistic.flesch_reading_ease(
         hard_academic_hungarian_text
     )
 
@@ -782,15 +782,15 @@ def test_flesch_reading_ease_hungarian():
 
 def test_smog_index_hungarian():
     # Arrange
-    textstat.set_lang("hu_HU")
+    textstat_logistic.set_lang("hu_HU")
     expected_easy = 0
     expected_hard = 17.9
     expected_hard_academic = 21.9
 
     # Act
-    actual_easy = textstat.smog_index(easy_hungarian_text)
-    actual_hard = textstat.smog_index(hard_hungarian_text)
-    actual_academic = textstat.smog_index(hard_academic_hungarian_text)
+    actual_easy = textstat_logistic.smog_index(easy_hungarian_text)
+    actual_hard = textstat_logistic.smog_index(hard_hungarian_text)
+    actual_academic = textstat_logistic.smog_index(hard_academic_hungarian_text)
 
     # Assert
     assert actual_easy == expected_easy
@@ -800,15 +800,15 @@ def test_smog_index_hungarian():
 
 def test_gunning_fog_hungarian():
     # Arrange
-    textstat.set_lang("hu_HU")
+    textstat_logistic.set_lang("hu_HU")
     expected_easy = 2.6
     expected_hard = 9.71
     expected_hard_academic = 14.41
 
     # Act
-    actual_easy = textstat.gunning_fog(easy_hungarian_text2)
-    actual_hard = textstat.gunning_fog(hard_hungarian_text)
-    actual_academic = textstat.gunning_fog(hard_academic_hungarian_text)
+    actual_easy = textstat_logistic.gunning_fog(easy_hungarian_text2)
+    actual_hard = textstat_logistic.gunning_fog(hard_hungarian_text)
+    actual_academic = textstat_logistic.gunning_fog(hard_academic_hungarian_text)
 
     # Assert
     assert actual_easy == expected_easy

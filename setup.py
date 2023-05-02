@@ -13,7 +13,7 @@ setup(
     long_description_content_type='text/markdown',
     package_data={'': ['easy_word_list'], '': ['*.txt']},
     include_package_data=True,
-    install_requires=['pyphen'],
+    install_requires=['pyphen', 'nltk'],
     license='MIT',
     python_requires=">=3.6",
     classifiers=(

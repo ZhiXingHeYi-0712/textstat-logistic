@@ -66,6 +66,9 @@ langs = {
 with open(os.path.join(__file__, '../resources/en/COCA_word_frequency.txt')) as f:
     COCA_word_list = f.read().strip().split('\n')
 
+with open(os.path.join(__file__, '../resources/en/easy_words.txt')) as f:
+    easy_words_string_list = f.read().strip().split('\n')
+
 
 def get_grade_suffix(grade: int) -> str:
     """
@@ -1061,7 +1064,10 @@ class textstatistics:
         try:
             return COCA_word_list.index(word.lower())
         except:
-            return 99999
+            if word.lower() in easy_words_string_list:
+                return 1
+            else:
+                return 99999
     
     def difficulty_function(self, word_freq) -> float:
         """The function that used to calculate the difficult score of the word.
@@ -1122,7 +1128,7 @@ class textstatistics:
             else:
                 return None
 
-        tokens = word_tokenize(text)  
+        tokens = word_tokenize(text.lower())  
         tagged_sent = pos_tag(tokens) 
 
         wnl = WordNetLemmatizer()
@@ -1131,8 +1137,9 @@ class textstatistics:
             wordnet_pos = get_wordnet_pos(tag[1]) or wordnet.NOUN
             lemmas_sent.append(wnl.lemmatize(tag[0], pos=wordnet_pos))
 
-        text = ' '.join(lemmas_sent)
-        words = set(re.findall(r"[\w\='‘’]+", text.lower()))
+
+        # words = set(re.findall(r"[\w\='‘’]+", text.lower()))
+        words = set(lemmas_sent)
 
         def contains_english(word):
             check_re = re.compile(r'[A-Za-z]', re.S)
@@ -1143,7 +1150,7 @@ class textstatistics:
         words = [w for w in words if contains_english(w)]
 
         diff_score = [self.logistic_dale_difficulty_score(word) for word in words]
-        return sum(diff_score)
+        return len(words), sum(diff_score)
     
 
     @lru_cache(maxsize=128)
@@ -1175,20 +1182,21 @@ class textstatistics:
         If the percentage of difficult words is > 5, 3.6365 is added to the
         score.
         """
-        word_count = self.lexicon_count(text)
-        count = word_count - self.logistic_dale_difficulty_paragraph(text)
+        word_count, diff_count = self.logistic_dale_difficulty_paragraph(text)
 
         try:
-            per_easy_words = float(count) / float(word_count) * 100
+            per_difficult_words = float(diff_count) / float(word_count) * 100
         except ZeroDivisionError:
             return 0.0
 
-        per_difficult_words = 100 - per_easy_words
+        per_easy_words = 100 - per_difficult_words
 
         vocabulary_score = 0.1579 * per_difficult_words
         sentence_score = 0.0496 * self.avg_sentence_length(text)
 
         score = vocabulary_score + sentence_score
+
+        print(per_difficult_words)
 
         if per_difficult_words > 5:
             score += 3.6365
