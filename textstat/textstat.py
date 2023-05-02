@@ -1101,11 +1101,47 @@ class textstatistics:
             difficulty_function = self.difficulty_function
 
         word_freq = self.get_word_frequency(word)
-        print(word, word_freq)
         return difficulty_function(word_freq)
     
     def logistic_dale_difficulty_paragraph(self, text: str):
+        # Lemmatize the words
+        from nltk import word_tokenize, pos_tag
+        from nltk.corpus import wordnet
+        from nltk.stem import WordNetLemmatizer
+
+        # 获取单词的词性
+        def get_wordnet_pos(tag):
+            if tag.startswith('J'):
+                return wordnet.ADJ
+            elif tag.startswith('V'):
+                return wordnet.VERB
+            elif tag.startswith('N'):
+                return wordnet.NOUN
+            elif tag.startswith('R'):
+                return wordnet.ADV
+            else:
+                return None
+
+        tokens = word_tokenize(text)  
+        tagged_sent = pos_tag(tokens) 
+
+        wnl = WordNetLemmatizer()
+        lemmas_sent = []
+        for tag in tagged_sent:
+            wordnet_pos = get_wordnet_pos(tag[1]) or wordnet.NOUN
+            lemmas_sent.append(wnl.lemmatize(tag[0], pos=wordnet_pos))
+
+        text = ' '.join(lemmas_sent)
         words = set(re.findall(r"[\w\='‘’]+", text.lower()))
+
+        def contains_english(word):
+            check_re = re.compile(r'[A-Za-z]', re.S)
+            res = re.findall(check_re, word)
+            return len(res) > 0
+
+        # only check words longer than 1
+        words = [w for w in words if contains_english(w)]
+
         diff_score = [self.logistic_dale_difficulty_score(word) for word in words]
         return sum(diff_score)
     
@@ -1153,8 +1189,6 @@ class textstatistics:
         sentence_score = 0.0496 * self.avg_sentence_length(text)
 
         score = vocabulary_score + sentence_score
-
-        print(per_difficult_words)
 
         if per_difficult_words > 5:
             score += 3.6365
