@@ -8,6 +8,10 @@ import pkg_resources
 from functools import lru_cache
 from pyphen import Pyphen
 
+import os
+from nltk.stem import WordNetLemmatizer
+wnl = WordNetLemmatizer()
+
 langs = {
     "en": {  # Default config
         "fre_base": 206.835,
@@ -59,6 +63,8 @@ langs = {
         "syllable_threshold": 5,
     }
 }
+with open(os.path.join(__file__, '../resources/en/COCA_word_frequency.txt')) as f:
+    COCA_word_list = f.read().strip().split('\n')
 
 
 def get_grade_suffix(grade: int) -> str:
@@ -1037,6 +1043,122 @@ class textstatistics:
         if per_difficult_words > 5:
             score += 3.6365
         return self._legacy_round(score, 2)
+    
+
+    def get_word_frequency(self, word: str) -> int:
+        """Return the word frequency based on COCA acedamic word frequency.
+
+        Parameters
+        ----------
+        word : str
+            given word
+
+        Returns
+        -------
+        int
+            The coca word frequency. If the word cannot be found, it will return 99999
+        """
+        try:
+            return COCA_word_list.index(word.lower())
+        except:
+            return 99999
+    
+    def difficulty_function(self, word_freq) -> float:
+        """The function that used to calculate the difficult score of the word.
+        You can override it to replace the calculate function as you need.
+
+        Parameters
+        ----------
+        word_freq : ind
+            word frequence. 
+
+        Returns
+        -------
+        float
+            word difficulty. Between 0 and 1.
+        """
+        if word_freq <= 3000:
+            return 0
+        elif word_freq >= 10000:
+            return 1
+        else:
+            # between 3000 and 10000
+            c = 2*1e-3
+            return 1 / (1 + math.exp(6500 * c - c * word_freq))
+
+
+    def logistic_dale_difficulty_score(self, word: str, difficulty_function=None) -> float:
+        r"""Return the difficulty score of the given word. The score is calcuated as the function below:
+
+        Difficulty score = 0 (if the word frequency is under 3000)
+        Difficulty score = 1 (if the word frequency is over 10000)
+        Difficulty score = 1/(1+exp(6500c-cx)) (c=2*10^{-3}, cases except those above)
+
+        In this way, we estimate the most frequent 3000 words has 0 difficulty, and the words whose frequency is above 10000 has 1 difficulty. You may also change the param to modify the result.
+
+        """
+        if difficulty_function == None:
+            difficulty_function = self.difficulty_function
+
+        word_freq = self.get_word_frequency(word)
+        print(word, word_freq)
+        return difficulty_function(word_freq)
+    
+    def logistic_dale_difficulty_paragraph(self, text: str):
+        words = set(re.findall(r"[\w\='‘’]+", text.lower()))
+        diff_score = [self.logistic_dale_difficulty_score(word) for word in words]
+        return sum(diff_score)
+    
+
+    @lru_cache(maxsize=128)
+    def logistic_dale_chall_readability_score(self, text: str) -> float:
+        r"""Estimate the Logistic Dale-Chall readability score.
+
+        This method use the logistic curve to simulate the word difficulty after the 3000 easy words. 
+        The param can be modified, while the result may not comparable with the origin dale chall score.
+        This test is only used for self-learning, and it hasn't be valid by any research.
+
+        Parameters
+        ----------
+        text : str
+            A text string.
+
+        Returns
+        -------
+        float
+            An approximation of the Dale-Chall readability score.
+
+        Notes
+        -----
+        The estimate of the Dale-Chall readability score is calculated as:
+
+        .. math::
+
+            (0.1579*%\ difficult\ words)+(0.0496*avg\ words\ per\ sentence)
+
+        If the percentage of difficult words is > 5, 3.6365 is added to the
+        score.
+        """
+        word_count = self.lexicon_count(text)
+        count = word_count - self.logistic_dale_difficulty_paragraph(text)
+
+        try:
+            per_easy_words = float(count) / float(word_count) * 100
+        except ZeroDivisionError:
+            return 0.0
+
+        per_difficult_words = 100 - per_easy_words
+
+        vocabulary_score = 0.1579 * per_difficult_words
+        sentence_score = 0.0496 * self.avg_sentence_length(text)
+
+        score = vocabulary_score + sentence_score
+
+        print(per_difficult_words)
+
+        if per_difficult_words > 5:
+            score += 3.6365
+        return (self._legacy_round(score, 2), vocabulary_score, sentence_score)
 
     @lru_cache(maxsize=128)
     def gunning_fog(self, text: str) -> float:
